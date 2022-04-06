@@ -15,6 +15,7 @@ mkfs
 kernel/kernel
 user/usys.S
 .gdbinit
+.idea
 VNC-Server
 papers
 cmake-build-debug

@@ -1,6 +1,5 @@
 K=kernel
 U=user
-G=gui
 
 OBJS = \
   $K/entry.o \
@@ -30,18 +29,6 @@ OBJS = \
   $K/kernelvec.o \
   $K/plic.o \
   $K/virtio_disk.o\
-  $G/ide.o\
-  $G/ioapic.o\
-  $G/kbd.o\
-  $G/lapic.o\
-  $G/mp.o\
-  $G/picirq.o\
-  $G/trapasm.o\
-  $G/vectors.o\
-  $G/gui.o\
-  $G/mouse.o\
-  $G/msg.o\
-  $G/window_manager.o\
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
@@ -103,7 +90,7 @@ tags: $(OBJS) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o $G/user_gui.o $G/user_window.o $G/user_handler.o
+ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -143,7 +130,6 @@ UPROGS=\
 	$U/_ls\
 	$U/_mkdir\
 	$U/_mysh\
-	$U/_load\
 	$U/_pwd\
 	$U/_rm\
 	$U/_sh\
@@ -152,12 +138,6 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-	$U/_desktop\
-	$U/_startWindow\
-	$U/_editor\
-	$U/_explorer\
-	$U/_shell\
-	$U/_demo\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
