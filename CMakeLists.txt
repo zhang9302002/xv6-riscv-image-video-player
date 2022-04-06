@@ -11,6 +11,7 @@ add_executable(xv6_riscv
         user/forktest.c
         user/grep.c
         user/grind.c
+        user/hello.c
         user/init.c
         user/kill.c
         user/ln.c
