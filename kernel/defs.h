@@ -68,8 +68,9 @@ void            kinit(void);
 // log.c
 void            initlog(int, struct superblock*);
 void            log_write(struct buf*);
-void            begin_op(void);
-void            end_op(void);
+void            begin_op(int);
+void            end_op(int);
+void            crash_op(int,int);
 
 // pipe.c
 int             pipealloc(struct file**, struct file**);
@@ -116,6 +117,7 @@ void            initlock(struct spinlock*, char*);
 void            release(struct spinlock*);
 void            push_off(void);
 void            pop_off(void);
+uint64          sys_ntas(void);
 
 // sleeplock.c
 void            acquiresleep(struct sleeplock*);
@@ -189,3 +191,36 @@ void            virtio_disk_intr(void);
 
 int             read_user(void);
 int             write_user(void);
+
+
+// buddy.c
+void           bd_init(void*,void*);
+void           bd_free(void*);
+void           *bd_malloc(uint64);
+
+struct list {
+    struct list *next;
+    struct list *prev;
+};
+
+// list.c
+void lst_init(struct list*);
+void lst_remove(struct list*);
+void lst_push(struct list*, void *);
+void *lst_pop(struct list*);
+void lst_print(struct list*);
+int lst_empty(struct list*);
+
+
+//////////////////
+// pci.c
+void            pci_init();
+
+// vga.c
+void            vga_init();
+void            show_window_text(char *, int, int);
+uint64          window_intr(int);
+uint64          sys_show_window();
+uint64          sys_close_window();
+uint64          sys_reg_keycb();
+uint64          sys_cb_return();

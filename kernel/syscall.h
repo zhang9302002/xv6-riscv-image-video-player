@@ -21,10 +21,18 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 
-#define SYS_read_user 22
-#define SYS_write_user 23
 #define SYS_create_sem 24
 #define SYS_free_sem 25
 #define SYS_sem_p 26
 #define SYS_sem_v 27
-#define SYS_getpwd 28
+
+// System calls for labs
+#define SYS_ntas   29
+#define SYS_crash  30
+#define SYS_mount  31
+#define SYS_umount 32
+
+#define SYS_show_window 33
+#define SYS_close_window 34
+#define SYS_reg_keycb 35
+#define SYS_cb_return 36

@@ -41,10 +41,16 @@ int atoi(const char*);
 int memcmp(const void *, const void *, uint);
 void *memcpy(void *, const void *, uint);
 
-int read_user(void);
-int write_user(void);
 int create_sem(int);
 int free_sem(int);
 int sem_p(int);
 int sem_v(int);
-int getpwd(char *, int);
+
+int ntas();
+int crash(const char*, int);
+int mount(char*, char *);
+int umount(char*);
+int show_window(char*);
+int close_window();
+int reg_keycb(void (*keycb)(uint64, uint64));
+int cb_return();

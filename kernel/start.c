@@ -16,7 +16,7 @@ uint64 timer_scratch[NCPU][5];
 // assembly code in kernelvec.S for machine-mode timer interrupt.
 extern void timervec();
 
-// entry.S jumps here in machine mode on stack0.
+// enry.S jumps here in mtachine mode on stack0.
 void
 start()
 {

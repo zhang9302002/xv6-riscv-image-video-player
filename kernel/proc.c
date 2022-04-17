@@ -353,9 +353,9 @@ exit(int status)
     }
   }
 
-  begin_op();
+  begin_op(ROOTDEV);
   iput(p->cwd);
-  end_op();
+  end_op(ROOTDEV);
   p->cwd = 0;
 
   acquire(&wait_lock);

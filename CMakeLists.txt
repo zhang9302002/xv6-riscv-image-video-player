@@ -15,7 +15,6 @@ add_executable(xv6_riscv
         user/init.c
         user/kill.c
         user/ln.c
-        user/load.c
         user/ls.c
         user/mkdir.c
         user/mysh.c
@@ -29,9 +28,28 @@ add_executable(xv6_riscv
         user/user.h
         user/wc.c
         user/zombie.c
+
+        user/alloctest.c
+        user/ball.c
+        user/bcachetest.c
+        user/brot.c
+        user/call.c
+        user/count.c
+        user/cowtest.c
+        user/crashtest.c
+        user/mounttest.c
+        user/kalloctest.c
+        user/testsh.c
+        user/usertests.c
+        user/uthread.c
+        user/font.h
+
+        user/viewer.c
+
         mkfs/mkfs.c
         kernel/bio.c
         kernel/buf.h
+        kernel/buddy.c
         kernel/console.c
         kernel/date.h
         kernel/defs.h
@@ -47,6 +65,8 @@ add_executable(xv6_riscv
         kernel/main.c
         kernel/memlayout.h
         kernel/param.h
+        kernel/palette.h
+        kernel/pci.c
         kernel/pipe.c
         kernel/plic.c
         kernel/printf.c
@@ -68,6 +88,8 @@ add_executable(xv6_riscv
         kernel/trap.c
         kernel/types.h
         kernel/uart.c
+        kernel/vga.h
+        kernel/vga.c
         kernel/virtio.h
         kernel/virtio_disk.c
         kernel/vm.c)

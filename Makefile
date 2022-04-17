@@ -29,6 +29,10 @@ OBJS = \
   $K/kernelvec.o \
   $K/plic.o \
   $K/virtio_disk.o\
+  $K/buddy.o \
+  $K/list.o \
+  $K/pci.o \
+  $K/vga.o
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
@@ -109,6 +113,10 @@ $U/_forktest: $U/forktest.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_forktest $U/forktest.o $U/ulib.o $U/usys.o
 	$(OBJDUMP) -S $U/_forktest > $U/forktest.asm
 
+$U/_uthread: $U/uthread.o $U/uthread_switch.o $(ULIB)
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_uthread $U/uthread.o $U/uthread_switch.o $(ULIB)
+	$(OBJDUMP) -S $U/_uthread > $U/uthread.asm
+
 mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 	gcc -Werror -Wall -I. -o mkfs/mkfs mkfs/mkfs.c
 
@@ -138,9 +146,22 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
+	$U/_cowtest\
+	$U/_uthread\
+	$U/_call\
+	$U/_testsh\
+	$U/_kalloctest\
+	$U/_bcachetest\
+	$U/_mounttest\
+	$U/_crashtest\
+	$U/_alloctest\
+	$U/_ball\
+	$U/_brot\
+	$U/_count \
+	$U/_viewer
 
-fs.img: mkfs/mkfs README $(UPROGS)
-	mkfs/mkfs fs.img README $(UPROGS)
+fs.img: mkfs/mkfs README CMakeLists.txt user/xargstest.sh $(UPROGS)
+	mkfs/mkfs fs.img README CMakeLists.txt user/xargstest.sh $(UPROGS)
 
 -include kernel/*.d user/*.d
 
@@ -162,9 +183,10 @@ ifndef CPUS
 CPUS := 3
 endif
 
-QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 128M -smp $(CPUS) -nographic
+QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 3G -smp $(CPUS) -nographic
 QEMUOPTS += -drive file=fs.img,if=none,format=raw,id=x0
 QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+QEMUOPTS += -device VGA -vga cirrus -vnc localhost:0
 
 qemu: $K/kernel fs.img
 	$(QEMU) $(QEMUOPTS)

@@ -8,6 +8,8 @@
 #include "proc.h"
 #include "defs.h"
 
+uint64 ntest_and_set;
+
 void
 initlock(struct spinlock *lk, char *name)
 {
@@ -107,4 +109,10 @@ pop_off(void)
   c->noff -= 1;
   if(c->noff == 0 && c->intena)
     intr_on();
+}
+
+uint64
+sys_ntas(void)
+{
+    return ntest_and_set;
 }

@@ -113,6 +113,10 @@ extern uint64 sys_sem_p(void);
 extern uint64 sys_sem_v(void);
 extern uint64 sys_getpwd(void);
 
+extern uint64 sys_ntas(void);
+extern uint64 sys_crash(void);
+
+
 static uint64 (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -136,13 +140,17 @@ static uint64 (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 
-[SYS_read_user] sys_read_user,
-[SYS_write_user] sys_write_user,
 [SYS_create_sem] sys_create_sem,
 [SYS_free_sem] sys_free_sem,
 [SYS_sem_p] sys_sem_p,
 [SYS_sem_v] sys_sem_v,
-[SYS_getpwd] sys_getpwd,
+
+[SYS_ntas]    sys_ntas,
+[SYS_crash]   sys_crash,
+[SYS_show_window]   sys_show_window,
+[SYS_close_window]   sys_close_window,
+[SYS_reg_keycb]   sys_reg_keycb,
+[SYS_cb_return]   sys_cb_return,
 };
 
 void
