@@ -48,11 +48,11 @@
 #define NUM 8
 
 // a single descriptor, from the spec.
-struct virtq_desc {
-  uint64 addr;
-  uint32 len;
-  uint16 flags;
-  uint16 next;
+struct VRingDesc {
+    uint64 addr;
+    uint32 len;
+    uint16 flags;
+    uint16 next;
 };
 #define VRING_DESC_F_NEXT  1 // chained with another descriptor
 #define VRING_DESC_F_WRITE 2 // device writes (vs read)
@@ -67,15 +67,15 @@ struct virtq_avail {
 
 // one entry in the "used" ring, with which the
 // device tells the driver about completed requests.
-struct virtq_used_elem {
+struct VRingUsedElem {
   uint32 id;   // index of start of completed descriptor chain
   uint32 len;
 };
 
-struct virtq_used {
-  uint16 flags; // always zero
-  uint16 idx;   // device increments when it adds a ring[] entry
-  struct virtq_used_elem ring[NUM];
+struct UsedArea {
+    uint16 flags; // always zero
+    uint16 id;   // device increments when it adds a ring[] entry
+    struct VRingUsedElem elems[NUM];
 };
 
 // these are specific to virtio block devices, e.g. disks,

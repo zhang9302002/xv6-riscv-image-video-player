@@ -878,15 +878,28 @@ int njGetImageSize(void)        { return nj.width * nj.height * nj.ncomp; }
 #define PADDING_SIZE 1
 
 #define cuf(i, j, k) cuf[(((i)-1)*width+(j)-1)*3+k]
+#define max(x, y) (((x) > (y)) ? (x) : (y))
+#define min(x, y) (((x) < (y)) ? (x) : (y))
+#define ZOOM_IN 'o'
+#define ZOOM_OUT 'p'
+#define UP_ARROW 'w'
+#define DOWN_ARROW 's'
+#define RIGHT_ARROW 'd'
+#define LEFT_ARROW 'a'
 
 char fbuf[WINDOW_HEIGHT][WINDOW_WIDTH];
 char __attribute((unused)) discard;
 char number[7] = {'0', '0', '0', '0', '0', '0', 0};
 
 char bu[512];
-char name[30];
 
-static void draw_background() {
+int height, width, scale_rate, hoff, woff;  // scale of picture
+int offset, expOffset;
+int newWidth, newHeight;
+char *cuf;  // get rgb of picture
+int update = 0; // flag: whether to update
+
+void loadPicture(char name[]) {
     int fd = 0, n = 0;
     int size = 0;
     // read jpeg file
@@ -912,44 +925,100 @@ static void draw_background() {
     njDecode(buf, size);
     free((void*)buf);
 
-    int width = njGetWidth();
-    int height = njGetHeight();
-    char *cuf = malloc(height * width * 3);
+    width = njGetWidth();
+    height = njGetHeight();
+    cuf = malloc(height * width * 3);
     memcpy(cuf, njGetImage(), njGetImageSize());
 
     printf("raw height=%d, raw width=%d\n", height, width);
-    int offset = 0, expOffset = 1;
-    int newWidth = width, newHeight = height;
+    offset = 0, expOffset = 1;
+    newWidth = width, newHeight = height;
     while(newWidth >= WINDOW_WIDTH || newHeight >= WINDOW_HEIGHT) {
         newHeight >>= 1;
         newWidth >>= 1;
         offset++;
         expOffset <<= 1;
     }
-
     printf("compressed height=%d, compressed width=%d\n", newHeight, newWidth);
+}
+static void draw() {
+    for(int i = 0; i < scale_rate; ++i) {
+        newHeight <<= 1;
+        newWidth <<= 1;
+        offset--;
+        expOffset >>= 1;
+    }
+    for(int i = 0; i > scale_rate; --i) {
+        newHeight >>= 1;
+        newWidth >>= 1;
+        offset++;
+        expOffset <<= 1;
+    }
+    printf("h=%d, w=%d, offset = %d\n", newHeight, newWidth, offset);
 
     int ioff = (WINDOW_HEIGHT - newHeight) >> 1;
     int joff = (WINDOW_WIDTH - newWidth) >> 1;
-    for (int i = 0; i < newHeight; i++) {
-        for (int j = 0; j < newWidth; j++) {
-            int ar = 0, ag = 0, ab = 0;
-            int bi = i << offset;
-            int bj = j << offset;
-            for(int ki = 0; ki < expOffset; ++ki)
-                for(int kj = 0; kj < expOffset; ++kj) {
-                    ar += cuf(bi + ki, bj + kj, 0);
-                    ag += cuf(bi + ki, bj + kj, 1);
-                    ab += cuf(bi + ki, bj + kj, 2);
-                }
-            int r = ar >> (6 + offset + offset);
-            int g = ag >> (5 + offset + offset);
-            int b = ab >> (5 + offset + offset);
 
-            fbuf[i + ioff][j + joff] = (r << 6) | (g << 3) | b;
+    ioff += hoff;
+    joff += woff;
+
+    if(offset >= 0) { // lower pixel or equal pixel
+        for (int i = 0; i < WINDOW_HEIGHT; i++)
+            for (int j = 0; j < WINDOW_WIDTH; j++)
+                fbuf[i][j] = 0;
+        for (int i = max(0, -ioff); i < min(newHeight, WINDOW_HEIGHT - ioff); i++) {
+            for (int j = max(0, -joff); j < min(newWidth, WINDOW_WIDTH - joff); j++) {
+                int ar = 0, ag = 0, ab = 0;
+                int bi = i << offset;
+                int bj = j << offset;
+                for (int ki = 0; ki < expOffset; ++ki)
+                    for (int kj = 0; kj < expOffset; ++kj) {
+                        ar += cuf(bi + ki, bj + kj, 0);
+                        ag += cuf(bi + ki, bj + kj, 1);
+                        ab += cuf(bi + ki, bj + kj, 2);
+                    }
+                int r = ar >> (6 + offset + offset);
+                int g = ag >> (5 + offset + offset);
+                int b = ab >> (5 + offset + offset);
+
+                int ni = i + ioff, nj = j + joff;
+                if (ni >= 0 && ni < WINDOW_HEIGHT && nj >= 0 && nj < WINDOW_WIDTH)
+                    fbuf[ni][nj] = (r << 6) | (g << 3) | b;
+            }
         }
     }
 
+    for(int i = 0; i < scale_rate; ++i) {
+        newHeight >>= 1;
+        newWidth >>= 1;
+        offset++;
+        expOffset <<= 1;
+    }
+    for(int i = 0; i > scale_rate; --i) {
+        newHeight <<= 1;
+        newWidth <<= 1;
+        offset--;
+        expOffset >>= 1;
+    }
+}
+void key_handle(uint64 key0, uint64 key1) {
+    int step = 10;
+    if(key1 == ZOOM_IN) {
+        if(offset > scale_rate)
+            scale_rate++;
+    } else if(key1 == ZOOM_OUT) {
+        scale_rate--;
+    } else if (key1 == UP_ARROW) {
+        hoff += step;
+    } else if (key1 == DOWN_ARROW) {
+        hoff -= step;
+    } else if (key1 == LEFT_ARROW) {
+        woff += step;
+    } else if (key1 == RIGHT_ARROW) {
+        woff -= step;
+    }
+    update = 1;
+    cb_return();
 }
 
 int main(int argc, char *argv[]) {
@@ -957,11 +1026,21 @@ int main(int argc, char *argv[]) {
         fprintf(2, "Usage: viewer files...\n");
         exit(1);
     }
-    memcpy(name, argv[1], strlen(argv[1]));
+    loadPicture(argv[1]);
 
-    draw_background();
-    show_window((char*) fbuf);
+    update = 1;
+    reg_keycb(key_handle);
+    while(1) {
+        if(update) {
+            printf("updating window\n");
+            printf("scale=%d\n", scale_rate);
 
+            draw();
+            show_window((char *) fbuf);
+            update = 0;
+        }
+        sleep(1);
+    }
     read(0, &discard, 1);
     close_window();
     exit(0);

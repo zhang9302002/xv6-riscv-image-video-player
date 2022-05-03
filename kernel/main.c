@@ -2,6 +2,10 @@
 #include "param.h"
 #include "memlayout.h"
 #include "riscv.h"
+#include "spinlock.h"
+#include "sleeplock.h"
+#include "fs.h"
+#include "file.h"
 #include "defs.h"
 
 volatile static int started = 0;
@@ -28,7 +32,7 @@ main()
     iinit();         // inode table
     fileinit();      // file table
     pci_init();
-    virtio_disk_init(); // emulated hard disk
+    virtio_disk_init(minor(ROOTDEV)); // emulated hard disk
     userinit();      // first user process
     __sync_synchronize();
     started = 1;

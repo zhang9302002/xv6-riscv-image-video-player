@@ -321,13 +321,13 @@ uint64 sys_close_window() {
 }
 
 uint64 sys_reg_keycb() {
-  // printrapframe("reg cb called from pid %d\n", myproc()->pid);
+//   printf("reg cb called from pid %d\n", myproc()->pid);
   uint64 keycbaddr;
   argaddr(0, &keycbaddr);
   struct proc * p = myproc();
   for (int win_loc = 5; win_loc >= 0; win_loc--) {
     if (windows[win_loc].proc == p) {
-      // printrapframe("setting window %d keycb to %p\n", win_loc, keycbaddr);
+//      printf("setting window %d keycb to %p\n", win_loc, keycbaddr);
       windows[win_loc].key_cb = keycbaddr;
       return 0;
     }
@@ -344,7 +344,7 @@ uint64 sys_reg_keycb() {
     windows[empty_loc].pid = p->pid;
     windows[empty_loc].proc = p;
     windows[empty_loc].key_cb = keycbaddr;
-    // printrapframe("reserved window %d\n", empty_loc);
+//     printf("reserved window %d keycb to %p\n", empty_loc, keycbaddr);
     selected_win = empty_loc;
   }
   return 0;
@@ -428,8 +428,8 @@ uint64 window_intr(int c) {
     return 1;
   }
   if (selected_win == -1) {
-    // printrapframe("no window selected!\n");
-    return 0;
+//     printf("no window selected!\n");
+     return 0;
   }
   struct proc *p = windows[selected_win].proc;
   if (c == C('X')) {
@@ -464,16 +464,17 @@ uint64 window_intr(int c) {
   }
   if (send_to_console) {
     return 0;
-  }
-  // printrapframe("selected_win = %d, p = %p, pid = %d, p->cb.entered = %d, windows[selected_win].key_cb = %p, key = %d\n",
-  //        selected_win, p, windows[selected_win].pid, p->cb.entered, windows[selected_win].key_cb, c);
-  if (selected_win >= 0 && !p->cb.entered && windows[selected_win].key_cb != NO_KEYCB) {
-    saveregs(p);
-    // printrapframe("going to handler %p\n", windows[selected_win].key_cb);
-    p->trapframe->a1 = (uint64)c;
-    p->trapframe->epc = windows[selected_win].key_cb;
-    p->cb.entered = 1;
-  }
+
+//     printf("selected_win = %d, p = %p, pid = %d, p->cb.entered = %d, windows[selected_win].key_cb = %p, key = %d\n",
+//            selected_win, p, windows[selected_win].pid, p->cb.entered, windows[selected_win].key_cb, c);
+    if (selected_win >= 0 && !p->cb.entered && windows[selected_win].key_cb != NO_KEYCB) {
+        saveregs(p);
+//        printf("going to handler %p\n", windows[selected_win].key_cb);
+        p->trapframe->a1 = (uint64)c;
+        p->trapframe->epc = windows[selected_win].key_cb;
+        p->cb.entered = 1;
+//        printf("gogogo\n");
+    }
   send_to_console = 1;
   return 1;
 }

@@ -6,8 +6,8 @@
 #define BACKGROUND_COLOR 0x72
 #define BALL_COLOR 0xff
 #define PAD_COLOR 0xff
-#define WINDOW_WIDTH 100
-#define WINDOW_HEIGHT 95
+#define WINDOW_WIDTH 320
+#define WINDOW_HEIGHT 200
 #define PADDING_SIZE 1
 #define BALL_WIDTH 5
 

@@ -7,7 +7,6 @@
 #include "kernel/fs.h"
 #include "kernel/file.h"
 #include "user/user.h"
-#include "user/nanojpeg.h"
 #include "kernel/fcntl.h"
 
 char *argv[] = { "mysh", 0 };

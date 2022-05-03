@@ -6,8 +6,8 @@
 
 #define BACKGROUND_COLOR 0xf0
 #define PAD_COLOR 0xff
-#define WINDOW_WIDTH 100
-#define WINDOW_HEIGHT 95
+#define WINDOW_WIDTH 320
+#define WINDOW_HEIGHT 200
 #define PADDING_SIZE 1
 
 char fbuf[WINDOW_HEIGHT][WINDOW_WIDTH];

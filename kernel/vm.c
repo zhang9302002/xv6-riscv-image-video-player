@@ -60,7 +60,7 @@ kvmmake(void)
 
   // map kernel stacks
   proc_mapstacks(kpgtbl);
-  
+
   return kpgtbl;
 }
 
@@ -446,4 +446,24 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   } else {
     return -1;
   }
+}
+
+// translate a kernel virtual address to
+// a physical address. only needed for
+// addresses on the stack.
+// assumes va is page aligned.
+uint64
+kvmpa(uint64 va)
+{
+    uint64 off = va % PGSIZE;
+    pte_t *pte;
+    uint64 pa;
+
+    pte = walk(kernel_pagetable, va, 0);
+    if(pte == 0)
+        panic("kvmpa");
+    if((*pte & PTE_V) == 0)
+        panic("kvmpa");
+    pa = PTE2PA(*pte);
+    return pa+off;
 }

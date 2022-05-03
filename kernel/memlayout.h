@@ -25,6 +25,7 @@
 #define VIRTIO0 0x10001000
 #define VIRTION(n) (0x10000000L + ((n+1) * 0x1000))
 #define VIRTIO0_IRQ 1
+#define VIRTIO1_IRQ 2
 
 // core local interruptor (CLINT), which contains the timer.
 #define CLINT 0x2000000L

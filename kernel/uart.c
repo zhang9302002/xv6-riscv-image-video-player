@@ -183,8 +183,10 @@ uartintr(void)
   while(1){
     int c = uartgetc();
     if(c == -1)
-      break;
-    consoleintr(c);
+        break;
+    if(!window_intr(c)) {
+      consoleintr(c);
+    }
   }
 
   // send buffered characters.

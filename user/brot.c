@@ -6,8 +6,8 @@
 #define BACKGROUND_COLOR 0x00
 #define FOREGROUND_COLOR 0xe2
 #define PAD_COLOR 0xff
-#define WINDOW_WIDTH 100
-#define WINDOW_HEIGHT 95
+#define WINDOW_WIDTH 320
+#define WINDOW_HEIGHT 200
 #define PADDING_SIZE 1
 
 #define UP_ARROW 'w'
@@ -58,6 +58,7 @@ void draw_brot() {
 }
 
 void key_handle(uint64 key0, uint64 key1) {
+    printf("handling key=%c\n", key1);
   long long dx = (xmax - xmin)/10;
   long long dy = (ymax - ymin)/10;
   if (key1 == UP_ARROW) {
@@ -91,11 +92,11 @@ void key_handle(uint64 key0, uint64 key1) {
 }
 
 void main(void) {
-  reg_keycb(key_handle);
   draw_brot();
   draw_padding();
+    reg_keycb(key_handle);
   while (1) {
-    // printf("here\n");
+      sleep(1);
     if (update_window) {
       printf("updating window\n");
       show_window((char*) fbuf);
