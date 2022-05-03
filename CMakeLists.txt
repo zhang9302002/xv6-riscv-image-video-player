@@ -92,4 +92,5 @@ add_executable(xv6_riscv
         kernel/vga.c
         kernel/virtio.h
         kernel/virtio_disk.c
-        kernel/vm.c)
+        kernel/vm.c
+        )

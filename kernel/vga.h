@@ -1,9 +1,9 @@
 static const uint8 BACKGROUND = 0x2f;
 #define WIDTH 320
 #define HEIGHT 200
-#define WINDOW_WIDTH 100
-#define WINDOW_HEIGHT 95
-#define WINDOW_PAD 10
+#define WINDOW_WIDTH 320
+#define WINDOW_HEIGHT 200
+#define WINDOW_PAD 0
 
 typedef struct {
     uint32 port;

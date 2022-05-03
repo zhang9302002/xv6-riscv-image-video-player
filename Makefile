@@ -160,8 +160,8 @@ UPROGS=\
 	$U/_count \
 	$U/_viewer
 
-fs.img: mkfs/mkfs README CMakeLists.txt user/xargstest.sh $(UPROGS)
-	mkfs/mkfs fs.img README CMakeLists.txt user/xargstest.sh $(UPROGS)
+fs.img: mkfs/mkfs README *.jpeg user/xargstest.sh $(UPROGS)
+	mkfs/mkfs fs.img README *.jpeg user/xargstest.sh $(UPROGS)
 
 -include kernel/*.d user/*.d
 
@@ -174,6 +174,7 @@ clean:
 	$(UPROGS)
 
 # try to generate a unique GDB port
+GDBPORT = $(shell expr `id -u` % 5000 + 25000)
 GDBPORT = $(shell expr `id -u` % 5000 + 25000)
 # QEMU's gdb stub command line changed in 0.11
 QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
