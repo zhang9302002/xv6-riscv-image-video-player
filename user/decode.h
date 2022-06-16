@@ -1,7 +1,7 @@
 #ifndef	_DECODE_H_
 #define	_DECODE_H_
 
-#include "common.h"
+#include "user/common.h"
 
 void decode_info(Bit_stream_struc*, struct frame_params*);
 void III_get_side_info(Bit_stream_struc *bs, struct III_side_info_t *si, struct frame_params *fr_ps);

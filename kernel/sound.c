@@ -11,9 +11,9 @@
 #define FOR(i, a, b) for (uint32 i = (a), i##_END_ = (b); i <= i##_END_; ++i)
 
 // all registers address can be found in https://wiki.osdev.org/AC97
-/*
- * Reference to Intel doc AC97
- */
+
+// Reference to Intel doc AC97
+
 #define PCI_CONFIG_SPACE_STA_CMD 0x4
 #define PCI_CONFIG_SPACE_NAMBA 0x10
 #define PCI_CONFIG_SPACE_NABMBA 0x14
@@ -49,19 +49,19 @@ uint32 read_pci_config_int(uint32 bus, uint32 slot, uint32 func, uint32 offset) 
 }
 
 uint32 read_pci_config_byte(uint32 bus, uint32 slot, uint32 func, uint32 offset) {
-    return *RegByte((bus << 16) | (slot << 11) | (func << 8) | (offset) | PCIE_ECAM);
+    return *RegByte((bus << 16) | (slot << 11) | (func << 8)  | (offset) | PCIE_ECAM);
 }
 
 void write_pci_config_byte(uint32 bus, uint32 slot, uint32 func, uint32 offset, uchar val) {
-    *RegByte((bus << 16) | (slot << 11) | (func << 8) | (offset) | PCIE_ECAM) = val;
+    *RegByte((bus << 16) | (slot << 11) | (func << 8)  | (offset) | PCIE_ECAM) = val;
 }
 
 void write_pci_config_int(uint32 bus, uint32 slot, uint32 func, uint32 offset, uint32 val) {
-    *RegInt((bus << 16) | (slot << 11) | (func << 8) | (offset) | PCIE_ECAM) = val;
+    *RegInt((bus << 16) | (slot << 11) | (func << 8)   | (offset) | PCIE_ECAM) = val;
 }
 
 void write_pci_config_short(uint32 bus, uint32 slot, uint32 func, uint32 offset, ushort val) {
-    *RegShort((bus << 16) | (slot << 11) | (func << 8) | (offset) | PCIE_ECAM) = val;
+    *RegShort((bus << 16) | (slot << 11) | (func << 8)  | (offset) | PCIE_ECAM) = val;
 }
 
 
@@ -92,8 +92,8 @@ void soundcard_init(uint32 bus, uint32 slot, uint32 func) {
     // write_pci_config_byte(bus, slot, func, 0x3c, PCI_IRQ); no effect !!!
 
     // Removing AC_RESET#
-    WriteRegByte(nabmba + 0x2c, 0x3); //  Global Control Register: Cold Reset, no interrupt
-    WriteRegByte(namba + 0x00, 0x1);  // NAMBA reset
+    WriteRegByte(nabmba + 0x2c, 0x2); //  Global Control Register: Cold Reset, no interrupt
+//    WriteRegByte(namba + 0x00, 0x1);  // NAMBA reset
     printf("AC_RESET removed successfully!\n");
 
     // Check until codec ready
@@ -188,18 +188,8 @@ void soundInterrupt(void) {
     node->flag |= PROCESSED;
 
     //0 sound file left
-    if (soundQueue == 0)
-    {
-        if ((flag & PCM_OUT) == PCM_OUT)
-        {
-            ushort sr = ReadRegShort(nabmba + 0x16);
-            WriteRegShort(nabmba + 0x16, sr);
-        }
-        else if ((flag & PCM_IN) == PCM_IN)
-        {
-            ushort sr = ReadRegShort(nabmba + 0x26);
-            WriteRegShort(nabmba + 0x26, sr);
-        }
+    WriteRegShort(nabmba + 0x16, 0x1c);
+    if (soundQueue == 0) {
         release(&soundLock);
         return;
     }
@@ -212,12 +202,8 @@ void soundInterrupt(void) {
     }
 
     //play music
-    if ((flag & PCM_OUT) == PCM_OUT)
-    {
-        ushort sr = ReadRegShort(nabmba + 0x16);
-        WriteRegShort(nabmba + 0x16, sr);
-        WriteRegByte(nabmba + 0x1B, 0x05);
-    }
+
+    WriteRegByte(nabmba + 0x1B, 0x05);
 
     release(&soundLock);
 }
@@ -244,6 +230,7 @@ void playSound(void) {
         //run audio
         //enable interrupt
         WriteRegByte(nabmba + 0x1B, 0x05);
+        WriteRegShort(nabmba + 0x16, 0x1c);
     }
 }
 

@@ -58,6 +58,16 @@ add_executable(xv6_riscv
         user/decode.c
         user/decode.h
 
+        user/playmp3.c
+        user/mp3dec.c
+        user/common.c
+        user/common.h
+        user/decodemp3.c
+        user/huffman.h
+        user/huffman.c
+        user/math.c
+        user/math.h
+
         mkfs/mkfs.c
         kernel/bio.c
         kernel/buf.h
@@ -111,6 +121,4 @@ add_executable(xv6_riscv
         kernel/sound.c
         kernel/sound.h
         kernel/sysaudio.c
-        kernel/picirq.c
-        kernel/ioapic.c
         )

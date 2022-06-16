@@ -4,7 +4,7 @@
 #include "param.h"
 #include "sound.h"
 #include "spinlock.h"
-#include "common.h"
+#include "user/common.h"
 #include "proc.h"
 
 static struct soundNode audiobuf[3];
@@ -57,7 +57,7 @@ int sys_setSampleRate(void)
 int
 sys_wavdecode(void)
 {
-//    printf("sys_wavdecode\n");
+    printf("sys_wavdecode\n");
     //soundNode的数据大小
     int bufsize = DMA_BUF_NUM * DMA_BUF_SIZE;
     acquire(&decodelock.lock);

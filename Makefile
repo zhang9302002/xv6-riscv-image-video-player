@@ -96,7 +96,7 @@ tags: $(OBJS) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o
+ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o $U/math.o $U/common.o $U/huffman.o $U/decodemp3.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -170,11 +170,13 @@ UPROGS=\
 	$U/_ren \
 	$U/_shell_sh \
 	$U/_play \
-	$U/_decode
+	$U/_decode \
+	$U/_mp3dec \
+	$U/_playmp3
 
 
-fs.img: mkfs/mkfs README.md *.jpeg *.wav user/xargstest.sh $(UPROGS)
-	mkfs/mkfs fs.img README *.jpeg *.wav user/xargstest.sh $(UPROGS)
+fs.img: mkfs/mkfs  *.jpeg *.wav *.mp3 user/xargstest.sh $(UPROGS)
+	mkfs/mkfs fs.img  *.jpeg *.wav *.mp3 user/xargstest.sh $(UPROGS)
 
 -include kernel/*.d user/*.d
 
@@ -200,8 +202,8 @@ endif
 QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 3G -smp $(CPUS) -nographic
 QEMUOPTS += -drive file=fs.img,if=none,format=raw,id=x0
 QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
-QEMUOPTS += -device VGA -vga cirrus -vnc localhost:0
-QEMUOPTS += -device AC97,id=sound0
+#QEMUOPTS += -device VGA -vga cirrus -vnc localhost:0
+QEMUOPTS += -device AC97
 
 qemu: $K/kernel fs.img
 	$(QEMU) $(QEMUOPTS)

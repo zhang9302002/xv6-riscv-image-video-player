@@ -987,7 +987,6 @@ static void draw() {
             }
         }
     }
-
     for(int i = 0; i < scale_rate; ++i) {
         newHeight >>= 1;
         newWidth >>= 1;

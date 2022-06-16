@@ -1,4 +1,4 @@
-#include "common.h"
+#include "user/common.h"
 
 #define DMA_BUF_NUM  32 
 #define DMA_SMP_NUM  0x80

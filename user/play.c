@@ -33,20 +33,25 @@ main(int argc, char *argv[])
         (info.info.bytes_per_sample != 0x0004)||
         (info.info.bits_per_sample != 0x0010)) {
         printf("data encoded in an unaccepted way\n");
+        printf("id=%x\n", info.info.id);
+        printf("channel=%x\n", info.info.channel);
+        printf("bytes_per_sample=%x\n", info.info.bytes_per_sample);
+        printf("bits_per_sample=%x\n", info.info.bits_per_sample);
         close(fd);
         exit(0);
     }
 
-    int pid = fork();
-    if (pid == 0) {
-        exec("mysh", argv);
-    }
+//    int pid = fork();
+//    if (pid == 0) {
+//        exec("mysh", argv);
+//    }
     printf("info.sample rate = %d\n", info.info.sample_rate);
     setSampleRate(info.info.sample_rate);
     uint rd = 0;
-
     int mp3pid = fork();
+    printf("p=%d\n", mp3pid);
     if (mp3pid == 0) {
+        printf("statt decod\n");
         exec("decode", argv);
         exit(0);
     }
@@ -70,7 +75,7 @@ main(int argc, char *argv[])
     close(fd);
     //kill(pid);
     kill(mp3pid);
-    wait(0);
+//    wait(0);
     wait(0);
     exit(0);
 }

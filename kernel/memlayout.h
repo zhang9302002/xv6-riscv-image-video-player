@@ -27,6 +27,9 @@
 #define VIRTIO0_IRQ 1
 #define VIRTIO1_IRQ 2
 
+// sound card AC97
+#define AC97_IRQ 33
+
 // core local interruptor (CLINT), which contains the timer.
 #define CLINT 0x2000000L
 #define CLINT_MTIMECMP(hartid) (CLINT + 0x4000 + 8*(hartid))
