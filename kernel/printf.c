@@ -50,6 +50,33 @@ printint(int xx, int base, int sign)
 }
 
 static void
+printdouble(double xx)
+{
+  char buf[16];
+  int i;
+  uint x;
+
+  x = (uint)(xx);
+  double y = xx - x;
+  i = 0;
+  do {
+    buf[i++] = digits[x % 10];
+  } while((x /= 10) != 0);
+  while(--i >= 0)
+    consputc(buf[i]);
+  consputc('.');
+  x = (uint)(y*10000.0);
+  i = 0;
+  do {
+    buf[i++] = digits[x % 10];
+  } while((x /= 10) != 0);
+  while(i < 4)
+    buf[i++] = digits[0];
+  while(--i >= 0)
+    consputc(buf[i]);
+}
+
+static void
 printptr(uint64 x)
 {
   int i;
@@ -86,6 +113,9 @@ printf(char *fmt, ...)
     switch(c){
     case 'd':
       printint(va_arg(ap, int), 10, 1);
+      break;
+    case 'f':
+      printdouble(va_arg(ap, double));
       break;
     case 'x':
       printint(va_arg(ap, int), 16, 1);

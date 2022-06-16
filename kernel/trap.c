@@ -186,11 +186,15 @@ devintr()
     int irq = plic_claim();
 
     if(irq == UART0_IRQ){
-      uartintr();
-    } else if(irq == VIRTIO0_IRQ || irq == VIRTIO1_IRQ ){
+        uartintr();
+    } else if(irq == VIRTIO0_IRQ || irq == VIRTIO1_IRQ ) {
         virtio_disk_intr(irq - VIRTIO0_IRQ);
-    } else if(irq){
-      printf("unexpected interrupt irq=%d\n", irq);
+    } else if(irq!=0) {
+        printf("wuhu, get irq=%d\n", irq);
+        soundInterrupt();
+    } else {
+        // temporary code
+        soundInterrupt();
     }
 
     // the PLIC allows each device to raise at most one
@@ -214,6 +218,7 @@ devintr()
 
     return 2;
   } else {
+      printf("devintr error\n");
     return 0;
   }
 }

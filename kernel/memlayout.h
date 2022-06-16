@@ -67,3 +67,7 @@
 //   TRAPFRAME (p->trapframe, used by the trampoline)
 //   TRAMPOLINE (the same page as in the kernel)
 #define TRAPFRAME (TRAMPOLINE - PGSIZE)
+
+//static inline uint v2p(void *a) { return ((uint)(uint64)(a))  - KERNBASE; }
+static inline uint v2p(void *a) { return (uint)a; }
+static inline void *p2v(uint a) { return (void *) ((a) + KERNBASE); }

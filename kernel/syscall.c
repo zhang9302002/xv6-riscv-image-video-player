@@ -61,6 +61,22 @@ argint(int n, int *ip)
   return 0;
 }
 
+// Fetch the nth word-sized system call argument as a pointer
+// to a block of memory of size n bytes.  Check that the pointer
+// lies within the process address space.
+int
+argptr(int n, char **pp, int size)
+{
+    int i;
+    struct proc *prc = myproc();
+    if(argint(n, &i) < 0)
+        return -1;
+    if((uint)i >= prc->sz || (uint)i+size > prc->sz)
+        return -1;
+    *pp = (char*)(uint64)(i);
+    return 0;
+}
+
 // Retrieve an argument as a pointer.
 // Doesn't check for legality, since
 // copyin/copyout will do that.
@@ -115,6 +131,16 @@ extern uint64 sys_getpwd(void);
 
 extern uint64 sys_ntas(void);
 extern uint64 sys_crash(void);
+extern uint64 sys_memory(void);
+
+extern uint64 sys_kwrite(void);
+extern uint64 sys_setSampleRate(void);
+extern uint64 sys_pause(void);
+extern uint64 sys_wavdecode(void);
+extern uint64 sys_beginDecode(void);
+extern uint64 sys_waitForDecode(void);
+extern uint64 sys_endDecode(void);
+extern uint64 sys_getCoreBuf(void);
 
 
 static uint64 (*syscalls[])(void) = {
@@ -145,12 +171,22 @@ static uint64 (*syscalls[])(void) = {
 [SYS_sem_p] sys_sem_p,
 [SYS_sem_v] sys_sem_v,
 
-[SYS_ntas]    sys_ntas,
-[SYS_crash]   sys_crash,
+[SYS_ntas]          sys_ntas,
+[SYS_crash]         sys_crash,
 [SYS_show_window]   sys_show_window,
-[SYS_close_window]   sys_close_window,
-[SYS_reg_keycb]   sys_reg_keycb,
-[SYS_cb_return]   sys_cb_return,
+[SYS_close_window]  sys_close_window,
+[SYS_reg_keycb]     sys_reg_keycb,
+[SYS_cb_return]     sys_cb_return,
+[SYS_memory]        sys_memory,
+
+[SYS_kwrite]        sys_kwrite,
+[SYS_setSampleRate] sys_setSampleRate,
+[SYS_pause]         sys_pause,
+[SYS_wavdecode]     sys_wavdecode,
+[SYS_beginDecode]   sys_beginDecode,
+[SYS_waitForDecode] sys_waitForDecode,
+[SYS_endDecode]     sys_endDecode,
+[SYS_getCoreBuf]    sys_getCoreBuf,
 };
 
 void

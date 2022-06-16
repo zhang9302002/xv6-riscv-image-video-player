@@ -42,8 +42,8 @@ kvmmake(void)
     // VGA IO ports.
     kvmmap(kpgtbl, 0x3000000, 0x3000000, 0x10000, PTE_R | PTE_W);
 
-    // CLINT
-    kvmmap(kpgtbl, CLINT, CLINT, 0x10000, PTE_R | PTE_W);
+  // CLINT
+  kvmmap(kpgtbl, CLINT, CLINT, 0x10000, PTE_R | PTE_W);
 
   // PLIC
   kvmmap(kpgtbl, PLIC, PLIC, 0x400000, PTE_R | PTE_W);

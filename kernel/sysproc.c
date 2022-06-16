@@ -175,3 +175,10 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// return the available memory of xv6
+uint64
+sys_memory(void)
+{
+    return bd_memory();
+}

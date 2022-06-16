@@ -5,7 +5,6 @@
 int main() {
     printf("Hello, World!\n");
     int sid = create_sem(1);
-
     int pid;
     pid = fork();
     if(pid > 0){

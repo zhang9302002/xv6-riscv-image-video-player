@@ -55,3 +55,13 @@ int close_window();
 int reg_keycb(void (*keycb)(uint64, uint64));
 int cb_return();
 
+int memory();
+
+int setSampleRate();
+int pause();
+int wavdecode();
+int beginDecode();
+int waitForDecode();
+int endDecode();
+int getCoreBuf();
+int kwrite(void*, int);

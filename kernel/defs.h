@@ -141,6 +141,7 @@ int             argaddr(int, uint64 *);
 int             fetchstr(uint64, char*, int);
 int             fetchaddr(uint64, uint64*);
 void            syscall();
+int             argptr(int n, char **pp, int size);
 
 // trap.c
 extern uint     ticks;
@@ -201,6 +202,7 @@ int             write_user(void);
 void           bd_init(void*,void*);
 void           bd_free(void*);
 void           *bd_malloc(uint64);
+int            bd_memory();
 
 struct list {
     struct list *next;
@@ -223,8 +225,20 @@ void            pci_init();
 // vga.c
 void            vga_init();
 void            show_window_text(char *, int, int);
-uint64          window_intr(int);
 uint64          sys_show_window();
 uint64          sys_close_window();
+uint64          window_intr(int);
 uint64          sys_reg_keycb();
 uint64          sys_cb_return();
+
+
+//////////////////
+// sound.c
+void            soundinit(void);
+void            soundcardinit(uchar, uchar, uchar);
+void            soundInterrupt(void);
+void            setSoundSampleRate(uint samplerate);
+
+// picirq.c
+void            picenable(int);
+void            picinit(void);

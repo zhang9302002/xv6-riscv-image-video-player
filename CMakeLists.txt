@@ -23,6 +23,7 @@ add_executable(xv6_riscv
         user/rm.c
         user/sh.c
         user/stressfs.c
+        user/top.c
         user/ulib.c
         user/umalloc.c
         user/user.h
@@ -46,6 +47,17 @@ add_executable(xv6_riscv
 
         user/viewer.c
 
+        user/play.c
+        user/touch.c
+        user/uptime.c
+        user/cp.c
+        user/mv.c
+        user/editor.c
+        user/ren.c
+        user/shell_sh.c
+        user/decode.c
+        user/decode.h
+
         mkfs/mkfs.c
         kernel/bio.c
         kernel/buf.h
@@ -62,6 +74,7 @@ add_executable(xv6_riscv
         kernel/fs.h
         kernel/kalloc.c
         kernel/log.c
+        kernel/list.c
         kernel/main.c
         kernel/memlayout.h
         kernel/param.h
@@ -88,9 +101,16 @@ add_executable(xv6_riscv
         kernel/trap.c
         kernel/types.h
         kernel/uart.c
+
         kernel/vga.h
         kernel/vga.c
         kernel/virtio.h
         kernel/virtio_disk.c
         kernel/vm.c
+
+        kernel/sound.c
+        kernel/sound.h
+        kernel/sysaudio.c
+        kernel/picirq.c
+        kernel/ioapic.c
         )

@@ -8,6 +8,7 @@
 #include "file.h"
 #include "defs.h"
 
+
 volatile static int started = 0;
 
 // start() jumps here in supervisor mode on all CPUs.
@@ -31,7 +32,8 @@ main()
     binit();         // buffer cache
     iinit();         // inode table
     fileinit();      // file table
-    pci_init();
+    pci_init();      // init vga
+    soundinit();     // init AC97
     virtio_disk_init(minor(ROOTDEV)); // emulated hard disk
     userinit();      // first user process
     __sync_synchronize();

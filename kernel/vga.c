@@ -462,7 +462,7 @@ uint64 window_intr(int c) {
     }
     return 1;
   }
-  if (send_to_console) {
+  if (send_to_console)
     return 0;
 
 //     printf("selected_win = %d, p = %p, pid = %d, p->cb.entered = %d, windows[selected_win].key_cb = %p, key = %d\n",

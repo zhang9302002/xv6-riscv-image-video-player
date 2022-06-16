@@ -76,6 +76,24 @@ bd_print_vector(char *vector, int len) {
   }
   printf("\n");
 }
+int bd_count_vector(char *vector, int len) {
+    int last, lb;
+    int ans = 0;
+    last = 1;
+    lb = 0;
+    for (int b = 0; b < len; b++) {
+        if (last == bit_isset(vector, b))
+            continue;
+        if(last == 1)
+            ans += b - lb;
+        lb = b;
+        last = bit_isset(vector, b);
+    }
+    if(lb == 0 || last == 1) {
+        ans += len - lb;
+    }
+    return ans;
+}
 
 // Print buddy's data structures
 void
@@ -352,3 +370,13 @@ bd_init(void *base, void *end) {
   }
 }
 
+
+int bd_memory() {
+//    bd_print();
+    int len = NBLK(0);
+    int used = bd_count_vector(bd_sizes[0].alloc, len);
+    used *= LEAF_SIZE;
+    len *= LEAF_SIZE;
+    printf("memory used %fMB / %fMB\n", used * 1.0 / 1048576, len * 1.0 / 1048576);
+    return 0;
+}

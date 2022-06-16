@@ -36,3 +36,13 @@
 #define SYS_close_window 34
 #define SYS_reg_keycb 35
 #define SYS_cb_return 36
+
+#define SYS_memory 37
+#define SYS_kwrite 38
+#define SYS_setSampleRate 39
+#define SYS_pause 40
+#define SYS_wavdecode 41
+#define SYS_beginDecode 42
+#define SYS_waitForDecode 43
+#define SYS_endDecode 44
+#define SYS_getCoreBuf 45

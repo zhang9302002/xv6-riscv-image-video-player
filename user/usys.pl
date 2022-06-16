@@ -52,3 +52,14 @@ entry("show_window");
 entry("close_window");
 entry("reg_keycb");
 entry("cb_return");
+
+
+entry("memory");
+entry("setSampleRate");
+entry("pause");
+entry("wavdecode");
+entry("beginDecode");
+entry("waitForDecode");
+entry("endDecode");
+entry("getCoreBuf");
+entry("kwrite");

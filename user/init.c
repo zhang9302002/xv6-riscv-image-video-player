@@ -32,6 +32,7 @@ main(void)
     }
     if(pid == 0){
       exec("mysh", argv);
+//        exec("shell_sh", argv);
       printf("init: exec mysh failed\n");
       exit(1);
     }
