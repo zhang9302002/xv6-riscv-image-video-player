@@ -173,7 +173,7 @@ UPROGS=\
 	$U/_decode
 
 
-fs.img: mkfs/mkfs README *.jpeg *.wav user/xargstest.sh $(UPROGS)
+fs.img: mkfs/mkfs README.md *.jpeg *.wav user/xargstest.sh $(UPROGS)
 	mkfs/mkfs fs.img README *.jpeg *.wav user/xargstest.sh $(UPROGS)
 
 -include kernel/*.d user/*.d
