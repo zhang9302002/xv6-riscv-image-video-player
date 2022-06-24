@@ -115,7 +115,7 @@ void soundcard_init(uint32 bus, uint32 slot, uint32 func) {
         panic("Audio Init failed 1.");
         return;
     }
-    printf("Audio Codec Function is found, current volume is %x.\n", tmp);
+    printf("Audio Codec Functionsd is found, current volume is %x.\n", tmp);
 
     // Reading the Audio Codec Vendor ID
     uint32 vendorID1 = ReadRegShort(namba + 0x7c);

@@ -865,12 +865,6 @@ int njGetImageSize(void)        { return nj.width * nj.height * nj.ncomp; }
 #endif // _NJ_INCLUDE_HEADER_ONLY
 
 
-
-
-
-
-
-
 #define BACKGROUND_COLOR 0xf0
 #define PAD_COLOR 0xff
 #define WINDOW_WIDTH 320

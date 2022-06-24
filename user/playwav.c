@@ -46,47 +46,33 @@ main(int argc, char *argv[])
         read(fd, &info.data_id, 4);
         read(fd, &info.dlen, 4);
     }
-    printf("riff id=%s\n", &info.riff_id);
-    printf("rlen=%d\n", info.rlen);
-    printf("wave id=%s\n", &info.wave_id);
-    printf("data id=%x\n", info.data_id);
-    printf("dlen=%d\n", info.dlen);
-
 //    int pid = fork();
 //    if (pid == 0) {
 //        exec("mysh", argv);
 //    }
-    printf("info.sample rate = %d\n", info.info.sample_rate);
     setSampleRate(info.info.sample_rate);
     uint rd = 0;
-    printf("dlen = %d\n", info.dlen);
     int mp3pid = fork();
     if (mp3pid == 0) {
-//        printf("statt decod\n");
         exec("decode", argv);
         exit(0);
     }
     while (rd < info.dlen) {
         int len = (info.dlen - rd < BUF_SIZE ? info.dlen - rd : BUF_SIZE);
-        printf("while rd=%d, len=%d, read fd=%d\n", rd, info.dlen, fd);
         i = 0;
         read(fd, buf, len);
         rd += len;
         while(len > SINGLE_BUF_SIZE) {
-//            printf("kw: buf=%p\n", buf+(i)*SINGLE_BUF_SIZE);
             kwrite(buf+(i++)*SINGLE_BUF_SIZE, SINGLE_BUF_SIZE);
             len -= SINGLE_BUF_SIZE;
         }
         if(len > 0) {
-//            printf("kw: buf=%p\n", buf+(i)*SINGLE_BUF_SIZE);
             kwrite(buf+i*SINGLE_BUF_SIZE, len);
         }
     }
 
     close(fd);
-    //kill(pid);
     kill(mp3pid);
-//    wait(0);
     wait(0);
     exit(0);
 }

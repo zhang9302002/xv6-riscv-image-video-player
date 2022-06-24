@@ -38,30 +38,6 @@ void loadVideo(char name[]) {
         printf("viewer: cannot open %s\n", name);
         exit(1);
     }
-
-//    printf("size = %d\n", sizeof(struct RGB_Header));
-//    if((read(fd, &header, sizeof(header))) != sizeof(header)) {
-//        printf("format error, no SGI header\n");
-//        exit(1);
-//    }
-//    printf("magic number = %d\n", header.type);
-//    printf("copmress = %d\n", header.compression);
-//    printf("bytes per pixel = %d\n", header.bytesPerPixel);
-//    printf("dimension = %d\n", header.dimension);
-
-    if((n = read(fd, buf, sizeof(buf))) > 0) {
-        for(int i = 0; i < WINDOW_HEIGHT; ++i)
-            for(int j = 0; j < WINDOW_WIDTH; ++j) {
-                int pos = i * WINDOW_WIDTH + j;
-                uint16 val = buf[pos];
-                // format rrrr rggg gggb bbbb
-                int r = (int)((val & 0xF800) >> (6 + 5 + 3));
-                int g = (int)((val & 0x07E0) >> (5 + 3));
-                int b = (int)((val & 0x001E) >> (2));
-                fbuf[i][j] = (char)((r << 6) | (g << 3) | b);
-            }
-    }
-
 }
 
 void draw() {
@@ -76,6 +52,8 @@ void draw() {
                 int b = (int)((val & 0x001E) >> (2));
                 fbuf[i][j] = (char)((r << 6) | (g << 3) | b);
             }
+    } else {
+        exit(0);
     }
 }
 
@@ -100,16 +78,16 @@ int main(int argc, char *argv[]) {
 
     int pid = fork();
     if(pid == 0) {
+        sleep(8);
         exec("playwav", argv);
         exit(0);
     }
 
     update = 1;
     reg_keycb(key_handle);
+    int frame = 0;
     while(1) {
         if(update) {
-            printf("updating window\n");
-
             draw();
             show_window((char *) fbuf);
             update = 0;
