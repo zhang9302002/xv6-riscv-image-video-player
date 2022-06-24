@@ -47,7 +47,7 @@ add_executable(xv6_riscv
 
         user/viewer.c
 
-        user/play.c
+        user/playwav.c
         user/touch.c
         user/uptime.c
         user/cp.c
@@ -67,6 +67,9 @@ add_executable(xv6_riscv
         user/huffman.c
         user/math.c
         user/math.h
+
+        user/parsemp4.c
+        user/playmp4.c
 
         mkfs/mkfs.c
         kernel/bio.c

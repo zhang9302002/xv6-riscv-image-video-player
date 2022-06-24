@@ -169,14 +169,16 @@ UPROGS=\
 	$U/_editor \
 	$U/_ren \
 	$U/_shell_sh \
-	$U/_play \
+	$U/_playwav \
 	$U/_decode \
 	$U/_mp3dec \
-	$U/_playmp3
+	$U/_playmp3 \
+	$U/_parsemp4 \
+	$U/_playmp4
 
 
-fs.img: mkfs/mkfs  *.jpeg *.wav *.mp3 user/xargstest.sh $(UPROGS)
-	mkfs/mkfs fs.img  *.jpeg *.wav *.mp3 user/xargstest.sh $(UPROGS)
+fs.img: mkfs/mkfs *.jpeg *.wav *.rgb user/xargstest.sh $(UPROGS)
+	mkfs/mkfs fs.img *.jpeg *.wav *.rgb user/xargstest.sh $(UPROGS)
 
 -include kernel/*.d user/*.d
 
@@ -202,8 +204,8 @@ endif
 QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 3G -smp $(CPUS) -nographic
 QEMUOPTS += -drive file=fs.img,if=none,format=raw,id=x0
 QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
-#QEMUOPTS += -device VGA -vga cirrus -vnc localhost:0
-QEMUOPTS += -device AC97
+QEMUOPTS += -device VGA -vga cirrus -vnc localhost:0
+QEMUOPTS += -soundhw ac97
 
 qemu: $K/kernel fs.img
 	$(QEMU) $(QEMUOPTS)

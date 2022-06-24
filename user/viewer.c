@@ -941,6 +941,7 @@ void loadPicture(char name[]) {
     }
     printf("compressed height=%d, compressed width=%d\n", newHeight, newWidth);
 }
+
 static void draw() {
     for(int i = 0; i < scale_rate; ++i) {
         newHeight <<= 1;
@@ -977,6 +978,7 @@ static void draw() {
                         ag += cuf(bi + ki, bj + kj, 1);
                         ab += cuf(bi + ki, bj + kj, 2);
                     }
+                // format: rrgggbbb
                 int r = ar >> (6 + offset + offset);
                 int g = ag >> (5 + offset + offset);
                 int b = ab >> (5 + offset + offset);
@@ -1022,7 +1024,7 @@ void key_handle(uint64 key0, uint64 key1) {
 
 int main(int argc, char *argv[]) {
     if(argc < 2){
-        fprintf(2, "Usage: viewer files...\n");
+        fprintf(2, "Usage: viewer *.jpeg\n");
         exit(1);
     }
     loadPicture(argv[1]);

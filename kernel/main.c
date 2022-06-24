@@ -32,7 +32,7 @@ main()
     binit();         // buffer cache
     iinit();         // inode table
     fileinit();      // file table
-//    pci_init();      // init vga
+    pci_init();      // init vga
     soundinit();     // init AC97
     virtio_disk_init(minor(ROOTDEV)); // emulated hard disk
     userinit();      // first user process

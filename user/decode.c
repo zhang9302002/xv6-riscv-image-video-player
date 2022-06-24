@@ -2,7 +2,7 @@
 #include "user/user.h"
 int main()
 {
-    printf("a decoder\n");
+//    printf("a decoder\n");
 	while (1)
 		wavdecode();
 	exit(0);

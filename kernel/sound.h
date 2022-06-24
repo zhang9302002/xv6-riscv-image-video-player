@@ -15,6 +15,12 @@ struct fmt {
   ushort bits_per_sample;
 };
 
+struct lst {
+    uint id;
+    uint len;
+    uint type_id;
+};
+
 struct wav{
   uint riff_id;
   uint rlen;
