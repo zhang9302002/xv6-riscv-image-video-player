@@ -63,4 +63,5 @@ you must change [Makefile, L180-181](https://github.com/zhang9302002/xv6-riscv/b
 like this:
 
     > fs.img: mkfs/mkfs *.jpeg *.wav *.rgb user/xargstest.sh &lt;newfile&gt;  $(UPROGS)
-    >         mkfs/mkfs fs.img *.jpeg *.wav *.rgb user/xargstest.sh &lt;newfile&gt; $(UPROGS)
+    >
+    > mkfs/mkfs fs.img *.jpeg *.wav *.rgb user/xargstest.sh &lt;newfile&gt; $(UPROGS)
