@@ -1,5 +1,7 @@
 ## xv6-riscv JPEG/WAV/MP4 player
 
+![](assets/333.png) 
+
 This project contains multimedia players:
 * viewer *.jpeg
 * playwav *.wav
@@ -10,7 +12,6 @@ This project is based on:
 * https://github.com/keshavgupta21/xv6-vga/tree/xv6-riscv-fall19
 * http://svn.emphy.de/nanojpeg/trunk
 * https://github.com/zhaoyuhang/THSS14-XV6/tree/b3591cd7a69f4725ebf1964888ce86d447135f22/xv6
-* 
 
 ## Environment Setup
 
@@ -71,3 +72,4 @@ like this:
     > fs.img: mkfs/mkfs *.jpeg *.wav *.rgb user/xargstest.sh &lt;newfile&gt;  $(UPROGS)
     >
     > mkfs/mkfs fs.img *.jpeg *.wav *.rgb user/xargstest.sh &lt;newfile&gt; $(UPROGS)
+
