@@ -5,7 +5,7 @@
 
 int main()
 {
-	int result = uptime() * 1.5;
+	int result = uptime() * 9.5;
 	int hour = result / 360000;
 	int minute = (result % 360000) / 6000;
 	int second = (result % 6000) / 100;

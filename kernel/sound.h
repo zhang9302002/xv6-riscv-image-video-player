@@ -1,4 +1,4 @@
-#include "user/common.h"
+
 
 #define DMA_BUF_NUM  32 
 #define DMA_SMP_NUM  0x80
@@ -29,16 +29,6 @@ struct wav{
   uint data_id;
   uint dlen;
 };
-
-#define	BUFSIZE	4096
-struct coreBuf{
-	unsigned int buf[BUFSIZE];
-	unsigned int buf_bit_idx;
-	unsigned long offset, totbit, buf_byte_idx;
-	struct frame_params fr_ps;
-	struct III_side_info_t III_side_info; 
-};
-
 
 struct soundNode{
   volatile int flag;

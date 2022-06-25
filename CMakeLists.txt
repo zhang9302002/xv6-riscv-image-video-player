@@ -5,46 +5,34 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories("${PROJECT_SOURCE_DIR}")
 
 add_executable(xv6_riscv
-        user/hello.c
         user/cat.c
         user/echo.c
         user/forktest.c
         user/grep.c
-        user/grind.c
         user/hello.c
         user/init.c
         user/kill.c
         user/ln.c
         user/ls.c
         user/mkdir.c
-        user/mysh.c
-        user/printf.c
-        user/pwd.c
         user/rm.c
         user/sh.c
         user/stressfs.c
-        user/top.c
-        user/ulib.c
-        user/umalloc.c
+        user/usertests.c
         user/user.h
+        user/grind.c
         user/wc.c
         user/zombie.c
 
-        user/alloctest.c
-        user/ball.c
-        user/bcachetest.c
-        user/brot.c
-        user/call.c
-        user/count.c
-        user/cowtest.c
-        user/crashtest.c
-        user/mounttest.c
-        user/kalloctest.c
-        user/testsh.c
-        user/usertests.c
-        user/uthread.c
-        user/font.h
+        user/hello.c
+        user/mysh.c
+        user/printf.c
+        user/pwd.c
+        user/top.c
+        user/ulib.c
+        user/umalloc.c
 
+        user/font.h
         user/viewer.c
 
         user/playwav.c
@@ -57,16 +45,6 @@ add_executable(xv6_riscv
         user/shell_sh.c
         user/decode.c
         user/decode.h
-
-        user/playmp3.c
-        user/mp3dec.c
-        user/common.c
-        user/common.h
-        user/decodemp3.c
-        user/huffman.h
-        user/huffman.c
-        user/math.c
-        user/math.h
 
         user/parsemp4.c
         user/playmp4.c

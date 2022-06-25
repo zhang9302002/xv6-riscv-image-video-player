@@ -238,7 +238,3 @@ void            soundinit(void);
 void            soundcardinit(uchar, uchar, uchar);
 void            soundInterrupt(void);
 void            setSoundSampleRate(uint samplerate);
-
-// picirq.c
-void            picenable(int);
-void            picinit(void);

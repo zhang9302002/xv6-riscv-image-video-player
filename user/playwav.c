@@ -46,10 +46,6 @@ main(int argc, char *argv[])
         read(fd, &info.data_id, 4);
         read(fd, &info.dlen, 4);
     }
-//    int pid = fork();
-//    if (pid == 0) {
-//        exec("mysh", argv);
-//    }
     setSampleRate(info.info.sample_rate);
     uint rd = 0;
     int mp3pid = fork();

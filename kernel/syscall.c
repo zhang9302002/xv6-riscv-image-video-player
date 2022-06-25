@@ -171,8 +171,6 @@ static uint64 (*syscalls[])(void) = {
 [SYS_sem_p] sys_sem_p,
 [SYS_sem_v] sys_sem_v,
 
-[SYS_ntas]          sys_ntas,
-[SYS_crash]         sys_crash,
 [SYS_show_window]   sys_show_window,
 [SYS_close_window]  sys_close_window,
 [SYS_reg_keycb]     sys_reg_keycb,
@@ -183,10 +181,6 @@ static uint64 (*syscalls[])(void) = {
 [SYS_setSampleRate] sys_setSampleRate,
 [SYS_pause]         sys_pause,
 [SYS_wavdecode]     sys_wavdecode,
-[SYS_beginDecode]   sys_beginDecode,
-[SYS_waitForDecode] sys_waitForDecode,
-[SYS_endDecode]     sys_endDecode,
-[SYS_getCoreBuf]    sys_getCoreBuf,
 };
 
 void

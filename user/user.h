@@ -46,10 +46,6 @@ int free_sem(int);
 int sem_p(int);
 int sem_v(int);
 
-int ntas();
-int crash(const char*, int);
-int mount(char*, char *);
-int umount(char*);
 int show_window(char*);
 int close_window();
 int reg_keycb(void (*keycb)(uint64, uint64));

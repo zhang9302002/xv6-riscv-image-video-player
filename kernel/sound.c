@@ -14,12 +14,6 @@
 
 // Reference to Intel doc AC97
 
-#define PCI_CONFIG_SPACE_STA_CMD 0x4
-#define PCI_CONFIG_SPACE_NAMBA 0x10
-#define PCI_CONFIG_SPACE_NABMBA 0x14
-#define PCI_CONFIG_SPACE_SID_SVID 0x2C
-#define PCI_CONFIG_SPACE_INTRL 0x3C
-
 static struct spinlock soundLock;
 static struct soundNode *soundQueue;
 
@@ -69,11 +63,9 @@ void soundcard_init(uint32 bus, uint32 slot, uint32 func) {
     //Initailize Interruption
     initlock(&soundLock, "sound");
 
-
     // Initializing the Audio I/O Space
     write_pci_config_byte(bus, slot, func, 0x4, 0x5); // reg1: status|command, set Bus Master=1, IO space = 1
     // reg2: class=04, subclass=01, prog IF=00, revision ID=01
-//    printf("prefix = %x, reg2 = %x\n", (bus << 16) | (slot << 11) | (func << 8), read_pci_config_int(bus, slot, func, 0x8));
 
     //// get BAR0
     // Write Native Audio Mixer Base Address
@@ -89,11 +81,9 @@ void soundcard_init(uint32 bus, uint32 slot, uint32 func) {
     // Hardware Interrupt Routing
     // dword: Byte
     // word: Short
-    // write_pci_config_byte(bus, slot, func, 0x3c, PCI_IRQ); no effect !!!
 
     // Removing AC_RESET#
     WriteRegByte(nabmba + 0x2c, 0x2); //  Global Control Register: Cold Reset, no interrupt
-//    WriteRegByte(namba + 0x00, 0x1);  // NAMBA reset
     printf("AC_RESET removed successfully!\n");
 
     // Check until codec ready
@@ -126,19 +116,9 @@ void soundcard_init(uint32 bus, uint32 slot, uint32 func) {
     write_pci_config_int(bus, slot, func, 0x2c, vendorID); // regB: Subsystem ID | Subsystem Vendor ID
     printf("Audio Codec Vendor ID read successfully!, vendorID is %x\n", vendorID);
 
-    // Read the infomation of interruption
-    uint inter = read_pci_config_int(bus, slot, func, PCI_CONFIG_SPACE_INTRL); // regF: Max latency|Min Grant|Interrupt PIN|Interrupt Line
-    printf("interrupt info: h:%x, d:%d\n", inter, inter); // pin=1, line=0
-    write_pci_config_int(bus, slot, func, PCI_CONFIG_SPACE_INTRL, 0x161);
-    inter = read_pci_config_int(bus, slot, func, PCI_CONFIG_SPACE_INTRL);
-    printf("interrupt info: h:%x, d:%d\n", inter, inter); // pin=1, line=97
     // Buffer Descriptor List
-    uint temp;
     uint base = v2p(descriTable);
-    printf("base: %x -> %x\n", descriTable, base);
     WriteRegInt(nabmba + 0x10, base); // NABM register box for PCM OUT
-    temp = ReadRegInt(nabmba + 0x10);
-    printf("temp: %x\n", temp);
 }
 
 void soundinit(void) {

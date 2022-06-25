@@ -96,7 +96,7 @@ tags: $(OBJS) _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o $U/math.o $U/common.o $U/huffman.o $U/decodemp3.o
+ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -115,10 +115,6 @@ $U/_forktest: $U/forktest.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_forktest $U/forktest.o $U/ulib.o $U/usys.o
 	$(OBJDUMP) -S $U/_forktest > $U/forktest.asm
 
-$U/_uthread: $U/uthread.o $U/uthread_switch.o $(ULIB)
-	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_uthread $U/uthread.o $U/uthread_switch.o $(ULIB)
-	$(OBJDUMP) -S $U/_uthread > $U/uthread.asm
-
 mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 	gcc -Werror -Wall -I. -o mkfs/mkfs mkfs/mkfs.c
 
@@ -133,46 +129,32 @@ UPROGS=\
 	$U/_echo\
 	$U/_forktest\
 	$U/_grep\
-	$U/_hello\
 	$U/_init\
 	$U/_kill\
 	$U/_ln\
 	$U/_ls\
 	$U/_mkdir\
-	$U/_mysh\
-	$U/_pwd\
 	$U/_rm\
 	$U/_sh\
 	$U/_stressfs\
-	$U/_top\
 	$U/_usertests\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-	$U/_cowtest\
-	$U/_uthread\
-	$U/_call\
-	$U/_testsh\
-	$U/_kalloctest\
-	$U/_bcachetest\
-	$U/_mounttest\
-	$U/_crashtest\
-	$U/_alloctest\
-	$U/_ball\
-	$U/_brot\
-	$U/_count \
-	$U/_viewer \
+	$U/_hello\
+	$U/_mysh\
+	$U/_pwd\
+	$U/_top\
 	$U/_touch \
 	$U/_uptime \
 	$U/_cp \
 	$U/_mv \
-	$U/_editor \
 	$U/_ren \
+	$U/_editor \
 	$U/_shell_sh \
+	$U/_viewer \
 	$U/_playwav \
 	$U/_decode \
-	$U/_mp3dec \
-	$U/_playmp3 \
 	$U/_parsemp4 \
 	$U/_playmp4
 

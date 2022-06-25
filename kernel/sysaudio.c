@@ -4,11 +4,9 @@
 #include "param.h"
 #include "sound.h"
 #include "spinlock.h"
-#include "user/common.h"
 #include "proc.h"
 
 static struct soundNode audiobuf[3];
-static struct coreBuf corebuf;
 int datacount;
 int bufcount;
 int audiosize; // new data size
@@ -32,10 +30,6 @@ struct decode decodelock, mp3lock;
 
 int sys_setSampleRate(void)
 {
-    corebuf.buf_bit_idx=8;
-    corebuf.totbit=0;
-    corebuf.buf_byte_idx=0;
-//    printf("sys_setaudiosmprate\n");
     int rate, i;
     //获取系统的第0个参数
     if (argint(0, &rate) < 0)
@@ -57,7 +51,6 @@ int sys_setSampleRate(void)
 int
 sys_wavdecode(void)
 {
-//    printf("sys_wavdecode\n");
     //soundNode的数据大小
     int bufsize = DMA_BUF_NUM * DMA_BUF_SIZE;
     acquire(&decodelock.lock);
@@ -68,7 +61,6 @@ sys_wavdecode(void)
     if (datacount == 0)
         memset(&audiobuf[bufcount], 0, sizeof(struct soundNode));
     //若soundNode的剩余大小大于数据大小，将数据写入soundNode中
-//    printf("%d - %d > %d\n", bufsize, datacount, audiosize);
     if (bufsize - datacount > audiosize) {
         memmove(&audiobuf[bufcount].data[datacount], buf, audiosize);
         audiobuf[bufcount].flag = PCM_OUT | PROCESSED;
@@ -107,64 +99,10 @@ sys_wavdecode(void)
             }
         }
     }
-//    printf("decodee..");
     acquire(&decodelock.lock);
     isdecoding = 0;
     wakeup(&decodelock.nwrite);
     release(&decodelock.lock);
-//    printf(" ..over\n");
-    return 0;
-}
-
-int sys_endDecode(void)
-{
-    acquire(&mp3lock.lock);
-    ismp3decoding = 0;
-    wakeup(&mp3lock.nwrite);
-    release(&mp3lock.lock);
-    return 0;
-}
-
-int
-sys_waitForDecode(void)
-{
-    acquire(&mp3lock.lock);
-    while (ismp3decoding == 0)
-    {
-	sleep(&mp3lock.nread, &mp3lock.lock);
-    }
-    int ptr1, ptr2;
-    argint(0, &ptr1);
-    argint(1, &ptr2);
-    memmove((char*)(uint64)ptr1, &corebuf.fr_ps, sizeof(struct frame_params));
-    memmove((char*)(uint64)ptr2, &corebuf.III_side_info, sizeof(struct III_side_info_t));
-    release(&mp3lock.lock);
-    return 0;
-}
-
-int
-sys_beginDecode(void)
-{
-    acquire(&mp3lock.lock);
-    while (ismp3decoding) {
- 	sleep(&mp3lock.nwrite, &mp3lock.lock);
-    }
-    int ptr1, ptr2;
-    argint(0, &ptr1);
-    argint(1, &ptr2);
-    memmove(&corebuf.fr_ps, (char*)(uint64)ptr1, sizeof(struct frame_params));
-    memmove(&corebuf.III_side_info, (char*)(uint64)ptr2, sizeof(struct III_side_info_t));
-
-    ismp3decoding = 1;
-    wakeup(&mp3lock.nread);
-    release(&mp3lock.lock);
-    acquire(&mp3lock.lock);
-    while (ismp3decoding) {
-        sleep(&mp3lock.nwrite, &mp3lock.lock);
-    }
-    while (TRUE)
-	    printf("!!!\n");
-    release(&mp3lock.lock);
     return 0;
 }
 
@@ -204,54 +142,3 @@ sys_pause(void)
     return 0;
 }
 
-int sys_getCoreBuf(void)
-{
-	int type, para;
-	argint(0, &type);
-	argint(1, &para);
-	unsigned long val=0;
-	register int j = para;
-	register int k, tmp;
-	switch(type)
-	{
-	case 1:
-		corebuf.buf[corebuf.offset % BUFSIZE] = para;
-		corebuf.offset++;
-		printf("haha %d\n", corebuf.offset);
-		return 0;
-	case 2:
-		return corebuf.totbit;
-	case 3:
-	corebuf.totbit += para;
-	while (j > 0) {
-		if (!corebuf.buf_bit_idx) {
-			corebuf.buf_bit_idx = 8;
-			corebuf.buf_byte_idx++;
-			if (corebuf.buf_byte_idx > corebuf.offset) {
-				printf("%d %d hjw Buffer overflow !!\n", corebuf.buf_byte_idx, corebuf.offset);
-				exit(0);
-			}
-		}
-		k = MIN(j, corebuf.buf_bit_idx);
-		tmp = buf[corebuf.buf_byte_idx%4096]&putmask[corebuf.buf_bit_idx];
-		tmp = tmp >> (corebuf.buf_bit_idx-k);
-		val |= tmp << (j-k);
-		corebuf.buf_bit_idx -= k;
-		j -= k;
-	}
-	return(val);
-	case 4:
-		corebuf.totbit -= para;
-		corebuf.buf_bit_idx += para;
-		while( corebuf.buf_bit_idx >= 8 ){
-			corebuf.buf_bit_idx -= 8;
-			corebuf.buf_byte_idx--;
-		}
-		return 0;
-	case 5:
-		corebuf.totbit -= para*8;
-		corebuf.buf_byte_idx -= para;
-		return 0;
-	}
-	return 0;
-}
